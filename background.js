@@ -27,6 +27,4 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
   chrome.tabs.sendMessage(tab.id, {
     type: "SHOW_TRANSLATION",
-    text: translated
-  });
 });
