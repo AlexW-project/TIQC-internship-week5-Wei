@@ -1,6 +1,6 @@
 importScripts("utils.js");
 
-// Create context menu
+// Create context menu on install
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "translate-selection",
@@ -9,26 +9,25 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// Handle translation requests
+// Handle context menu click
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== "translate-selection") return;
 
-  const selectedText = info.selectionText || "";
-  const prefs = await chrome.storage.sync.get(["targetLang"]);
+  const text = info.selectionText || "";
+  const prefs = await chrome.storage.sync.get("targetLang");
   const lang = prefs.targetLang || "en";
 
-  const key = await hashKey(tab.url + "::" + selectedText + "::" + lang);
+  const key = await hashKey(tab.url + "::" + text + "::" + lang);
   const cached = await chrome.storage.local.get(key);
 
-  let translated = cached[key];
-
-  if (!translated) {
-    translated = await mockTranslate(selectedText, lang);
-    await chrome.storage.local.set({ [key]: translated });
+  let translation = cached[key];
+  if (!translation) {
+    translation = await mockTranslate(text, lang);
+    await chrome.storage.local.set({ [key]: translation });
   }
 
   chrome.tabs.sendMessage(tab.id, {
     type: "SHOW_TRANSLATION",
-    text: translated
+    text: translation
   });
 });

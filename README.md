@@ -1,45 +1,35 @@
-# Week 5 Chrome Extension — Text Translator (Manifest V3)
+# Week 5 Chrome Extension — Text Translator
 
-A Chrome Extension that translates selected text using a mock translator, shows the result in an overlay, and caches previous translations.
+Translate selected text or whole pages with a floating overlay and caching.
 
----
-
-## 🚀 Features
-- Right-click → Translate selected text
-- Popup for page-level actions
-- Floating overlay translation panel
-- Options page for default language
-- Caching using chrome.storage.local
+## Features
+- Right-click → Translate selection
+- Floating overlay with close button
+- Popup for whole-page translation (mock)
+- Options page to set default language
+- Caching in chrome.storage.local
 - Preferences saved in chrome.storage.sync
 
----
-
-## 📦 Installation (Load Unpacked)
-1. Download/clone this repo
+## Installation
+1. Download this folder
 2. Open Chrome → `chrome://extensions/`
-3. Enable **Developer Mode**
-4. Click **Load unpacked**
-5. Select the folder
+3. Enable Developer Mode
+4. Click **Load unpacked** → select this folder
 
----
+## Architecture
+- `manifest.json` — entry point
+- `background.js` — context menu + caching + translation
+- `content.js` — overlay panel
+- `popup.html/js` — popup UI
+- `options.html/js` — preferences
+- `utils.js` — hashing & mock translator
 
-## 🧱 Architecture
-- `manifest.json` – MV3 entrypoint  
-- `background.js` – context menu, caching, translation  
-- `content.js` – overlay injection  
-- `popup.html/js` – popup UI  
-- `options.html/js` – user preferences  
-- `utils.js` – hashing + mock translator  
+## Storage Strategy
+- `chrome.storage.sync` — user preferences (<100KB, synced)
+- `chrome.storage.local` — translation cache (few MB)
 
----
+## Demo GIF
+Add `assets/demo.gif`:
 
-## 🧠 Storage Decisions
-### **chrome.storage.sync**
-- Saves user preferences (target language)
-- Small (< 100KB allowed)
-- Syncs automatically across Chrome devices
-
-### **chrome.storage.local**
-- Stores translation cache
-- Several MB available (fast)
-- Keyed by SHA-256 hash of:  
+```markdown
+![Demo](assets/demo.gif)
