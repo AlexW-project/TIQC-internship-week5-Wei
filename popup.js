@@ -1,8 +1,7 @@
 document.getElementById("translatePage").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
   chrome.tabs.sendMessage(tab.id, {
     type: "SHOW_TRANSLATION",
-    text: "Whole-page translation is not implemented in MVP.\nUse right-click selection."
+    text: "[Whole-page translation coming soon]"
   });
 });
